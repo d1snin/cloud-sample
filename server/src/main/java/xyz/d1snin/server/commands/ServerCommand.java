@@ -16,6 +16,7 @@ public abstract class ServerCommand extends Listener<ChannelMessageReceivedEvent
 
   private Consumer<ChannelMessageReceivedEvent> defaultExecution = null;
   private final List<Statement> statements = new LinkedList<>();
+  private Statement statement = null;
 
   @Override
   protected void execute(ChannelMessageReceivedEvent event) {
@@ -30,7 +31,7 @@ public abstract class ServerCommand extends Listener<ChannelMessageReceivedEvent
     ServerCommandExecutor executor =
         new ServerCommandExecutor(this, event, defaultExecution, statements);
 
-    if (executor.getArgs().get(0).equals(usage)) {
+    if (event.getContent().startsWith(usage)) {
       if (!executor.tryToExecute()) {
         executor.trigger();
       }
@@ -61,5 +62,13 @@ public abstract class ServerCommand extends Listener<ChannelMessageReceivedEvent
     } else {
       defaultExecution = consumer;
     }
+  }
+
+  protected void setStatement(Statement statement) {
+    this.statement = statement;
+  }
+
+  protected String getArgVal(int index) {
+    return statement.getArguments().get(index).getValue();
   }
 }

@@ -113,7 +113,7 @@ public class CloudServerImpl implements CloudServer {
                       StringBuilder builder = new StringBuilder();
 
                       out:
-                      while (channel.isOpen()) {
+                      while (channel.isOpen() && channel.isConnected()) {
                         int read = channel.read(buffer);
 
                         switch (read) {

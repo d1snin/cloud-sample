@@ -6,6 +6,7 @@ import xyz.d1snin.cloud.api.Cloud;
 import xyz.d1snin.cloud.api.CloudBuilder;
 import xyz.d1snin.server.api.CloudServerBuilder;
 import xyz.d1snin.server.commands.PingCommand;
+import xyz.d1snin.server.commands.cloud.UploadFileCommand;
 import xyz.d1snin.server.commands.fsmanagement.*;
 import xyz.d1snin.server.listeners.ServerEnabledListener;
 import xyz.d1snin.server.listeners.SocketConnectionListener;
@@ -36,6 +37,7 @@ public class ServerApplication {
               new ServerEnabledListener(),
               new SocketConnectionListener(),
               // commands
+              new UploadFileCommand(),
               new CatCommand(),
               new CdCommand(),
               new LsCommand(),

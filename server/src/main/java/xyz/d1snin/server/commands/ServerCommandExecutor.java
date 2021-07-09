@@ -81,6 +81,7 @@ public class ServerCommandExecutor {
             argCount++;
           }
         }
+        cmd.setStatement(s);
         s.getConsumer().accept(event);
         return true;
       }
