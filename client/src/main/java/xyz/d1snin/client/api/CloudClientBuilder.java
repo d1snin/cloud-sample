@@ -4,7 +4,7 @@ import javafx.stage.Stage;
 import lombok.NonNull;
 import xyz.d1snin.client.internal.CloudClientImpl;
 import xyz.d1snin.client.utils.Checks;
-import xyz.d1snin.client.utils.storage.AppStorage;
+import xyz.d1snin.client.storage.AppStorage;
 
 import java.net.URL;
 

@@ -1,4 +1,4 @@
-package xyz.d1snin.client.utils.storage;
+package xyz.d1snin.client.storage;
 
 import com.google.gson.stream.JsonWriter;
 import lombok.Getter;

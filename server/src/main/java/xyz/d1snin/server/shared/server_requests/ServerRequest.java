@@ -15,8 +15,8 @@ public abstract class ServerRequest {
 
   public abstract void execute(CloudServer server);
 
-  protected void sendResponse(String text, ResponseType type) {
-    Response response = new Response(text, type);
+  protected void sendResponse(int responseCode, ResponseType type) {
+    Response response = new Response(responseCode, type);
     response.setRequest(this);
 
     ctx.writeAndFlush(response);

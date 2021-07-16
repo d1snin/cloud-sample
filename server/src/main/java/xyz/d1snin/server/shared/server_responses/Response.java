@@ -6,7 +6,7 @@ import xyz.d1snin.server.shared.server_requests.ServerRequest;
 
 @Data
 public class Response {
-  private final String text;
+  private final int responseCode;
   private final ResponseType responseType;
 
   @Setter private ServerRequest request;
