@@ -31,8 +31,24 @@ allprojects {
 
 project("client") {
     apply plugin: "application"
+
+    dependencies {
+        implementation "io.netty:netty-all:$netty_version"
+        implementation "com.google.code.gson:gson:$gson_version"
+    }
 }
 
 project("server") {
     apply plugin: "application"
+
+    dependencies {
+        implementation "io.netty:netty-all:$netty_version"
+        implementation "com.google.code.gson:gson:$gson_version"
+    }
+}
+
+project("cloud") {
+    dependencies {
+        implementation "io.netty:netty-all:$netty_version"
+    }
 }
