@@ -13,13 +13,22 @@ import java.util.Objects;
 
 public class CloudClientImpl implements CloudClient {
 
+  private final String host;
+  private final int port;
   private final Stage stage;
   private final AppStorage appStorage;
   private final URL mainSceneLocation;
   private final URL loginSceneLocation;
 
   public CloudClientImpl(
-      Stage stage, AppStorage appStorage, URL mainSceneLocation, URL loginSceneLocation) {
+      String host,
+      int port,
+      Stage stage,
+      AppStorage appStorage,
+      URL mainSceneLocation,
+      URL loginSceneLocation) {
+    this.host = host;
+    this.port = port;
     this.stage = stage;
     this.appStorage = appStorage;
     this.mainSceneLocation = mainSceneLocation;

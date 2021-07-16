@@ -6,4 +6,10 @@ public class Checks {
       throw new IllegalArgumentException(name + " can not be null.");
     }
   }
+
+  public static void checkNotEmpty(String str, String name) {
+    if (str.isEmpty()) {
+      throw new IllegalArgumentException(name = " can not be empty.");
+    }
+  }
 }
