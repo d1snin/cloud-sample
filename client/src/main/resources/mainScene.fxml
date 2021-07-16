@@ -1,39 +1,52 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.image.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
-
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" stylesheets="main.css" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="xyz.d1snin.client.controllers.MainSceneController">
+<?import javafx.scene.text.Font?>
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0"
+            prefWidth="600.0" stylesheets="main.css" xmlns="http://javafx.com/javafx/11.0.1"
+            xmlns:fx="http://javafx.com/fxml/1" fx:controller="xyz.d1snin.client.controllers.MainSceneController">
     <bottom>
         <TextArea fx:id="logs_area" editable="false" prefHeight="288.0" prefWidth="600.0" BorderPane.alignment="CENTER">
             <font>
-                <Font name="JetBrains Mono Regular" size="15.0" />
+                <Font name="JetBrains Mono Regular" size="15.0"/>
             </font>
         </TextArea>
     </bottom>
-   <top>
-       <AnchorPane prefHeight="150.0" prefWidth="600.0" BorderPane.alignment="CENTER">
-           <opaqueInsets>
-               <Insets/>
-           </opaqueInsets>
-           <HBox id="h-box" alignment="CENTER" layoutX="189.0" prefHeight="150.0" prefWidth="411.0">
-               <Button id="upload_button" alignment="CENTER" mnemonicParsing="false" onAction="#upload" text="Upload File..."
-                       textAlignment="CENTER">
-                   <opaqueInsets>
-                       <Insets/>
-                   </opaqueInsets>
-                   <font>
-                       <Font name="JetBrains Mono Medium" size="21.0"/>
-                   </font>
-               </Button>
-           </HBox>
-           <ImageView id="cloud-image" fitHeight="150.0" fitWidth="165.0" layoutX="30.0" pickOnBounds="true"
-                      preserveRatio="true">
-               <Image url="@cloud-computing.png"/>
-           </ImageView>
-       </AnchorPane>
-   </top>
+    <top>
+        <HBox id="h-box" alignment="CENTER" prefHeight="150.0" prefWidth="392.0" BorderPane.alignment="CENTER">
+            <AnchorPane prefHeight="150.0" prefWidth="194.0">
+                <ImageView id="cloud-image" fitHeight="150.0" fitWidth="165.0" layoutX="22.0" layoutY="25.0"
+                           pickOnBounds="true" preserveRatio="true">
+                    <Image url="@cloud-computing.png"/>
+                </ImageView>
+            </AnchorPane>
+            <AnchorPane prefHeight="150.0" prefWidth="369.0">
+                <VBox id="v-box" alignment="CENTER" prefHeight="200.0" prefWidth="367.0">
+                    <Button id="download_button" alignment="CENTER" mnemonicParsing="false" onAction="#download"
+                            prefHeight="43.0" prefWidth="230.0" text="Download File..." textAlignment="CENTER">
+                        <opaqueInsets>
+                            <Insets/>
+                        </opaqueInsets>
+                        <font>
+                            <Font name="Ubuntu" size="21.0"/>
+                        </font>
+                    </Button>
+                    <Button id="upload_button" alignment="CENTER" mnemonicParsing="false" onAction="#upload"
+                            prefHeight="44.0" prefWidth="230.0" text="Upload File..." textAlignment="CENTER">
+                        <opaqueInsets>
+                            <Insets/>
+                        </opaqueInsets>
+                        <font>
+                            <Font name="Ubuntu" size="21.0"/>
+                        </font>
+                    </Button>
+                </VBox>
+            </AnchorPane>
+        </HBox>
+    </top>
 </BorderPane>

@@ -1,35 +1,37 @@
 package xyz.d1snin.cloud.internal;
 
 import com.mongodb.*;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import xyz.d1snin.cloud.api.Cloud;
-import xyz.d1snin.cloud.api.entities.User;
-import xyz.d1snin.cloud.internal.entities.UserImpl;
-import xyz.d1snin.cloud.internal.utils.Checks;
+import xyz.d1snin.cloud.api.User;
+import xyz.d1snin.cloud.utils.Checks;
 
-import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.Stream;
 
+@Slf4j
 public class CloudImpl implements Cloud {
 
-  private final File storageDirectory;
+  private final Path storageDirectory;
   private final DBCollection usersCollection;
 
   public CloudImpl(String storageName, String usersCollectionName, DB db) {
-    storageDirectory =
-        new File(
-            String.join(
-                File.separator, System.getProperty("user.home"), ".cloud-sample", storageName));
+    storageDirectory = Paths.get(System.getProperty("user.home"), ".cloud-sample", storageName);
 
-    Logger log = LoggerFactory.getLogger("Cloud");
+    if (!Files.exists(storageDirectory)) {
+      try {
+        Files.createDirectories(storageDirectory);
+        log.info("The storage was created at " + storageDirectory);
 
-    if (!storageDirectory.exists()) {
-      if (storageDirectory.mkdirs()) {
-        log.info("The storage was created at " + storageDirectory.getAbsolutePath());
+      } catch (IOException e) {
+        log.error("An error occurred while trying to setup storage directory.");
+        e.printStackTrace();
       }
     }
 
@@ -39,7 +41,7 @@ public class CloudImpl implements Cloud {
   }
 
   @Override
-  public File getStorageDirectory() {
+  public Path getStorageDirectory() {
     Checks.checkExists(storageDirectory, "Storage directory");
     return storageDirectory;
   }
