@@ -11,14 +11,10 @@
     -fx-background-color: text-area-background;
 }
 
-#v-box {
-    -fx-spacing: 10px;
+#h-box {
+    -fx-spacing: 230px;
 }
 
 #upload_button {
     -fx-background-color: #83ff83;
-}
-
-#download_button {
-    -fx-background-color: #ff2727;
 }

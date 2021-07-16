@@ -1,12 +1,3 @@
-# idea things
 .idea/
-
-# gradle and build files things
 .gradle/
 build/
-
-# ssl things
-*.pem
-*.jks
-*.p12
-ssl_configuration.json

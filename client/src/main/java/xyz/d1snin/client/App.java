@@ -1,23 +1,30 @@
 package xyz.d1snin.client;
 
 import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
-import xyz.d1snin.client.api.CloudClientBuilder;
 
+import java.io.IOException;
 import java.util.Objects;
 
 public class App extends Application {
 
-  public static void main(String[] args) {
-    Application.launch(args);
-  }
-
   @Override
-  public void start(Stage stage) {
-    new CloudClientBuilder()
-        .setStage(stage)
-        .setMainSceneLocation(Objects.requireNonNull(getClass().getResource("/mainScene.fxml")))
-        .setLoginSceneLocation(Objects.requireNonNull(getClass().getResource("/loginScene.fxml")))
-        .buildClientInstance();
+  public void start(Stage stage) throws IOException {
+    FXMLLoader loader = new FXMLLoader();
+    loader.setLocation(getClass().getResource("/mainScene.fxml"));
+
+    stage
+        .getIcons()
+        .add(
+            new Image(
+                Objects.requireNonNull(getClass().getResourceAsStream("/cloud-computing.png"))));
+    stage.setTitle("Cloud");
+    stage.setWidth(750);
+    stage.setHeight(400);
+    stage.setScene(new Scene(loader.load()));
+    stage.show();
   }
 }
