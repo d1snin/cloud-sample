@@ -7,7 +7,7 @@ jobs:
   build:
     docker:
       # specify the version you desire here
-      - image: gradle:jdk8
+      - image: bellsoft/liberica-openjdk-debian:8u292
 
       # Specify service dependencies here if necessary
       # CircleCI maintains a library of pre-built images
@@ -31,9 +31,7 @@ jobs:
             # fallback to using the latest cache if no exact match is found
             - v1-dependencies-
 
-      - run: apt install openjfx
-
-      - run: gradle dependencies
+      - run: ./gradlew dependencies
 
       - save_cache:
           paths:
@@ -41,4 +39,4 @@ jobs:
           key: v1-dependencies-{{ checksum "build.gradle" }}
 
       # run tests!
-      - run: gradle test
+      - run: ./gradlew test
