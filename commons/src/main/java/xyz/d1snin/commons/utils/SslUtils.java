@@ -1,4 +1,4 @@
-package xyz.d1snin.server.shared.utils;
+package xyz.d1snin.commons.utils;
 
 import lombok.SneakyThrows;
 

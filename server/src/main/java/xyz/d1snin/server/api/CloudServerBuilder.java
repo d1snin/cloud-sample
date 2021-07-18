@@ -2,6 +2,7 @@ package xyz.d1snin.server.api;
 
 import xyz.d1snin.cloud.api.Cloud;
 import xyz.d1snin.cloud.utils.Checks;
+import xyz.d1snin.commons.server.CloudServer;
 import xyz.d1snin.server.internal.CloudServerImpl;
 
 import java.io.IOException;

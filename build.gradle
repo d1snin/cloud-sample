@@ -38,6 +38,13 @@ project("client") {
     }
 }
 
+project("commons") {
+    dependencies {
+        implementation "io.netty:netty-all:$netty_version"
+        implementation "com.google.code.gson:gson:$gson_version"
+    }
+}
+
 project("server") {
     apply plugin: "application"
 

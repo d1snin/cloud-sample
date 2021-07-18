@@ -14,8 +14,8 @@ import io.netty.handler.codec.serialization.ObjectEncoder;
 import io.netty.handler.ssl.SslHandler;
 import lombok.extern.slf4j.Slf4j;
 import xyz.d1snin.cloud.api.Cloud;
-import xyz.d1snin.server.shared.utils.SslUtils;
-import xyz.d1snin.server.api.CloudServer;
+import xyz.d1snin.commons.server.CloudServer;
+import xyz.d1snin.commons.utils.SslUtils;
 
 import javax.net.ssl.SSLEngine;
 import java.io.InputStream;

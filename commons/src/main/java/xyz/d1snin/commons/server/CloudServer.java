@@ -1,4 +1,4 @@
-package xyz.d1snin.server.api;
+package xyz.d1snin.commons.server;
 
 import xyz.d1snin.cloud.api.Cloud;
 

@@ -19,6 +19,8 @@ public class CloudClientBuilder {
   private URL mainSceneLocation;
   private URL loginSceneLocation;
 
+  private boolean delayedLaunch = false;
+
   public CloudClientBuilder setHost(@NonNull String host) {
     Checks.checkNotEmpty(host, "Host");
     this.host = host;
@@ -56,6 +58,11 @@ public class CloudClientBuilder {
     return this;
   }
 
+  public CloudClientBuilder setDelayedLaunch(boolean value) {
+    this.delayedLaunch = value;
+    return this;
+  }
+
   public CloudClient buildClientInstance() {
     Checks.checkNotNull(host, "Host");
 
@@ -66,11 +73,25 @@ public class CloudClientBuilder {
     Checks.checkNotNull(stage, "Stage");
     Checks.checkNotNull(mainSceneLocation, "Main Scene Location");
     Checks.checkNotNull(loginSceneLocation, "Login Scene Location");
+    Checks.checkNotNull(sslKeyStore, "SSL KeyStore");
+    Checks.checkNotNull(sslKeyPass, "SSL KeyStore pass");
+    Checks.checkNotEmpty(sslKeyPass, "SSL KeyStore pass");
 
     CloudClient client =
         new CloudClientImpl(
-            host, port, stage, new AppStorage("cloud-app"), mainSceneLocation, loginSceneLocation);
-    client.launch();
+            host,
+            port,
+            stage,
+            new AppStorage("cloud-app"),
+            sslKeyStore,
+            sslKeyPass,
+            mainSceneLocation,
+            loginSceneLocation);
+
+    if (!delayedLaunch) {
+      client.launch();
+    }
+
     return client;
   }
 }

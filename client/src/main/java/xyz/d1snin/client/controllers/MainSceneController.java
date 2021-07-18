@@ -2,11 +2,15 @@ package xyz.d1snin.client.controllers;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.TextArea;
+import xyz.d1snin.client.api.managers.RequestManager;
 
 public class MainSceneController {
 
-  @FXML private TextArea logs_area;
+  private final RequestManager requestManager;
+
+  public MainSceneController(RequestManager requestManager) {
+    this.requestManager = requestManager;
+  }
 
   @FXML
   private void upload(ActionEvent actionEvent) {}

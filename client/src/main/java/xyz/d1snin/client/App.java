@@ -20,7 +20,7 @@ public class App extends Application {
     String keyPass;
     try {
       keyPass =
-          JsonParser.parseReader(new FileReader("ssl_configuration.json"))
+          JsonParser.parseReader(new FileReader("client/ssl_configuration.json"))
               .getAsJsonObject()
               .get("ssl_key")
               .getAsString();

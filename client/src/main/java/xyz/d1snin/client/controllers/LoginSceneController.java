@@ -1,21 +1,15 @@
 package xyz.d1snin.client.controllers;
 
 import javafx.event.ActionEvent;
-import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextField;
+import xyz.d1snin.client.api.managers.SessionManager;
 
 public class LoginSceneController {
 
-  @FXML private TextField login_field_login;
-  @FXML private PasswordField pass_field_login;
-  @FXML private Button login_button;
+  private final SessionManager sessionManager;
 
-  @FXML private TextField login_field_reg;
-  @FXML private PasswordField pass_field_reg;
-  @FXML private PasswordField pass_field_repeat_reg;
-  @FXML private Button register_button;
+  public LoginSceneController(SessionManager sessionManager) {
+    this.sessionManager = sessionManager;
+  }
 
   public void login(ActionEvent actionEvent) {}
 

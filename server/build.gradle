@@ -5,4 +5,5 @@ mainClassName = "xyz.d1snin.server.ServerApplication"
 
 dependencies {
     implementation project(":cloud")
+    implementation project(":commons")
 }

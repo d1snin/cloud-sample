@@ -2,7 +2,7 @@ group 'xyz.d1snin.client'
 version '1.0.0'
 
 dependencies {
-    implementation project(":server")
+    implementation project(":commons")
 
     dependencies {
         implementation "com.jfoenix:jfoenix:$jfoenix_version"

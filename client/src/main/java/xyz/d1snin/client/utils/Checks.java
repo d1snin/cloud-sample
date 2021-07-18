@@ -9,7 +9,7 @@ public class Checks {
 
   public static void checkNotEmpty(String str, String name) {
     if (str.isEmpty()) {
-      throw new IllegalArgumentException(name = " can not be empty.");
+      throw new IllegalArgumentException(name + " can not be empty.");
     }
   }
 }
