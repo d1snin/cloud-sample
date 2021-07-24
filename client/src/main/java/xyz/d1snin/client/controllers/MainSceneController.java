@@ -16,5 +16,5 @@ public class MainSceneController {
   private void upload(ActionEvent actionEvent) {}
 
   @FXML
-  public void download(ActionEvent actionEvent) {}
+  private void download(ActionEvent actionEvent) {}
 }

@@ -4,9 +4,11 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
+import java.io.Serializable;
+
 @Getter
 @RequiredArgsConstructor
-public class Response {
+public class Response implements Serializable {
   private final int responseCode;
   private final String content;
 

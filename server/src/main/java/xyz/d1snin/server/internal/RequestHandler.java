@@ -23,7 +23,7 @@ public class RequestHandler extends SimpleChannelInboundHandler<ServerRequest> {
         .handshakeFuture()
         .addListener(
             it ->
-                log.debug(
+                log.info(
                     "A new connection from a remote host {}, Session is protected by {} cipher suite.",
                     ctx.channel().remoteAddress(),
                     ctx.pipeline().get(SslHandler.class).engine().getSession().getCipherSuite()));
@@ -31,6 +31,7 @@ public class RequestHandler extends SimpleChannelInboundHandler<ServerRequest> {
 
   @Override
   protected void channelRead0(ChannelHandlerContext ctx, ServerRequest msg) {
+    log.info("handled: {}", msg);
     msg.setCtx(ctx);
     msg.execute(server, ctx);
   }

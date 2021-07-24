@@ -2,12 +2,12 @@ package xyz.d1snin.client.internal.managers;
 
 import io.netty.channel.Channel;
 import lombok.NonNull;
+import lombok.SneakyThrows;
 import xyz.d1snin.client.api.managers.RequestManager;
 import xyz.d1snin.commons.server_requests.ServerRequest;
 import xyz.d1snin.commons.server_responses.Response;
 
 import java.util.concurrent.*;
-import java.util.concurrent.atomic.AtomicReference;
 
 public class RequestManagerImpl implements RequestManager {
 
@@ -15,7 +15,8 @@ public class RequestManagerImpl implements RequestManager {
   private final CopyOnWriteArrayList<Response> responses;
   private final Channel channel;
 
-  public RequestManagerImpl(@NonNull Channel channel) {
+  @SneakyThrows
+  public RequestManagerImpl(Channel channel) {
     executor = Executors.newCachedThreadPool();
     responses = new CopyOnWriteArrayList<>();
     this.channel = channel;
@@ -28,20 +29,20 @@ public class RequestManagerImpl implements RequestManager {
           long requestId = ThreadLocalRandom.current().nextInt(100000000, 999999999 + 1);
 
           request.setRequestId(requestId);
+
           channel.writeAndFlush(request);
 
-          AtomicReference<Response> response = new AtomicReference<>();
+          Response response = null;
 
           do {
-            responses.forEach(
-                it -> {
-                  if (it.getRequestId() == requestId) {
-                    response.set(it);
-                  }
-                });
-          } while (response.get() == null);
+            for (Response res : responses) {
+              if (res.getRequestId() == requestId) {
+                response = res;
+              }
+            }
+          } while (response == null);
 
-          return response.get();
+          return response;
         });
   }
 

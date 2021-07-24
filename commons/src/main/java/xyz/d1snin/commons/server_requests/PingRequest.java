@@ -6,9 +6,11 @@ import lombok.NoArgsConstructor;
 import xyz.d1snin.commons.server.CloudServer;
 import xyz.d1snin.commons.server_responses.ResponseCodes;
 
+import java.io.Serializable;
+
 @Builder
 @NoArgsConstructor
-public class PingRequest extends ServerRequest {
+public class PingRequest extends ServerRequest implements Serializable {
 
   @Override
   public void execute(CloudServer server, ChannelHandlerContext ctx) {

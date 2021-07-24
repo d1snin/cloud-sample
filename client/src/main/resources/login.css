@@ -1,0 +1,20 @@
+.root {
+    -fx-background-color: black;
+}
+
+.tab-header-background {
+    -fx-background-color: #212121;
+}
+
+.text-field {
+    text-area-background: black;
+    -fx-text-fill: #00f5ff;
+}
+
+.text-field .content {
+    -fx-background-color: text-area-background;
+}
+
+.v-box {
+    -fx-spacing: 15px;
+}

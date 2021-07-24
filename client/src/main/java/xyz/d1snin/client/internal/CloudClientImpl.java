@@ -15,6 +15,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
+import lombok.SneakyThrows;
 import xyz.d1snin.client.api.CloudClient;
 import xyz.d1snin.client.api.managers.RequestManager;
 import xyz.d1snin.client.api.managers.SessionManager;
@@ -31,6 +32,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.Objects;
+import java.util.concurrent.Executors;
 
 public class CloudClientImpl implements CloudClient {
 
@@ -91,6 +93,7 @@ public class CloudClientImpl implements CloudClient {
     return requestManager;
   }
 
+  @SneakyThrows
   @Override
   public void launch() {
     SSLEngine engine =
@@ -100,6 +103,7 @@ public class CloudClientImpl implements CloudClient {
     EventLoopGroup group = new NioEventLoopGroup();
     Bootstrap boot = new Bootstrap();
 
+    CloudClient cloudClient = this;
     boot.group(group)
         .channel(NioSocketChannel.class)
         .handler(
@@ -110,23 +114,17 @@ public class CloudClientImpl implements CloudClient {
                 ch.pipeline()
                     .addLast(
                         new SslHandler(engine),
-                        new ObjectDecoder(ClassResolvers.cacheDisabled(null)),
                         new ObjectEncoder(),
-                        new ResponseHandler(requestManager));
+                        new ObjectDecoder(ClassResolvers.cacheDisabled(null)),
+                        new ResponseHandler(cloudClient));
               }
             });
 
-    try {
-      this.channel = boot.connect(host, port).sync().channel();
-    } catch (InterruptedException e) {
-      e.printStackTrace();
-      return;
-    }
+    this.channel = boot.connect(host, port).sync().channel();
 
     this.requestManager = new RequestManagerImpl(channel);
-    this.sessionManager = new SessionManagerImpl(requestManager);
+    this.sessionManager = new SessionManagerImpl(requestManager, appStorage);
 
-    FXMLLoader loader = new FXMLLoader();
     Image icon =
         new Image(Objects.requireNonNull(getClass().getResourceAsStream("/cloud-computing.png")));
 
@@ -135,22 +133,44 @@ public class CloudClientImpl implements CloudClient {
     stage.setWidth(750);
     stage.setHeight(400);
 
-    if (sessionManager.isAuthenticated()) {
-      loader.setLocation(mainSceneLocation);
-      loader.setController(new MainSceneController(requestManager));
+    FXMLLoader mainLoader = new FXMLLoader();
+    mainLoader.setLocation(mainSceneLocation);
+    mainLoader.setController(new MainSceneController(requestManager));
 
-    } else {
-      loader.setLocation(loginSceneLocation);
-      loader.setController(new LoginSceneController(sessionManager));
-    }
+    FXMLLoader loginLoader = new FXMLLoader();
+    loginLoader.setLocation(loginSceneLocation);
+    loginLoader.setController(new LoginSceneController(sessionManager, stage, mainLoader));
 
     try {
-      stage.setScene(new Scene(loader.load()));
+      stage.setScene(
+          new Scene(sessionManager.isAuthenticated() ? mainLoader.load() : loginLoader.load()));
     } catch (IOException e) {
       e.printStackTrace();
-      return;
     }
 
     stage.show();
+
+    stage.setOnCloseRequest(
+        w -> {
+          channel.disconnect();
+          channel.close();
+        });
+
+    Executors.newSingleThreadExecutor(
+            r -> {
+              Thread thread = new Thread(r);
+              thread.setDaemon(true);
+              return thread;
+            })
+        .execute(
+            () -> {
+              try {
+                channel.closeFuture().sync();
+              } catch (Exception e) {
+                e.printStackTrace();
+              }
+
+              group.shutdownGracefully();
+            });
   }
 }

@@ -7,10 +7,12 @@ import lombok.Setter;
 import xyz.d1snin.commons.server.CloudServer;
 import xyz.d1snin.commons.server_responses.Response;
 
+import java.io.Serializable;
+
 @Getter
 @Setter
 @EqualsAndHashCode
-public abstract class ServerRequest {
+public abstract class ServerRequest implements Serializable {
 
   private ChannelHandlerContext ctx;
   private long requestId;

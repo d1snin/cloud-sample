@@ -66,7 +66,7 @@ public class CloudImpl implements Cloud {
   }
 
   @Override
-  public User createNewUser(String login, String password) throws IllegalAccessException {
+  public User createNewUser(String login, String password) throws IllegalArgumentException {
     Checks.checkNotNull(login, "Login");
     Checks.checkNotEmpty(login, "Login");
     Checks.checkNotNull(password, "Password");
@@ -81,7 +81,7 @@ public class CloudImpl implements Cloud {
     User newUser = new UserImpl(String.valueOf(newUserId), login, password, this);
 
     if (usersCollection.count(new BasicDBObject("login", login)) > 0) {
-      throw new IllegalAccessException("User with this login already exists.");
+      throw new IllegalArgumentException("User with this login already exists.");
     }
 
     usersCollection.insert(
@@ -94,8 +94,7 @@ public class CloudImpl implements Cloud {
   }
 
   @Override
-  public User loginUser(String login, String password)
-      throws IllegalArgumentException, IllegalAccessException {
+  public User loginUser(String login, String password) throws IllegalArgumentException {
     Checks.checkNotNull(login, "Login");
     Checks.checkNotEmpty(login, "Login");
     Checks.checkNotNull(password, "Password");
@@ -105,7 +104,7 @@ public class CloudImpl implements Cloud {
         usersCollection.find(
             new BasicDBObject().append("login", login).append("password", password));
     if (!cursor.hasNext()) {
-      throw new IllegalAccessException(
+      throw new IllegalArgumentException(
           "Can not login this user because login or password is invalid.");
 
     } else {
