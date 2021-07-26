@@ -30,7 +30,11 @@ public class RequestManagerImpl implements RequestManager {
 
           request.setRequestId(requestId);
 
-          channel.writeAndFlush(request);
+          try {
+            channel.writeAndFlush(request).sync();
+          } catch (Exception e) {
+            e.printStackTrace();
+          }
 
           Response response = null;
 

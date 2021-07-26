@@ -6,15 +6,12 @@ import xyz.d1snin.client.internal.CloudClientImpl;
 import xyz.d1snin.client.storage.AppStorage;
 import xyz.d1snin.client.utils.Checks;
 
-import java.io.InputStream;
 import java.net.URL;
 
 public class CloudClientBuilder {
 
   private String host;
   private int port = -1;
-  private InputStream sslKeyStore;
-  private String sslKeyPass;
   private Stage stage;
   private URL mainSceneLocation;
   private URL loginSceneLocation;
@@ -29,17 +26,6 @@ public class CloudClientBuilder {
 
   public CloudClientBuilder setPort(int port) {
     this.port = port;
-    return this;
-  }
-
-  public CloudClientBuilder setSslKeyStore(@NonNull InputStream sslKeyStore) {
-    this.sslKeyStore = sslKeyStore;
-    return this;
-  }
-
-  public CloudClientBuilder setSslKeyPass(@NonNull String sslKeyPass) {
-    Checks.checkNotEmpty(sslKeyPass, "SSL KeyStore Pass");
-    this.sslKeyPass = sslKeyPass;
     return this;
   }
 
@@ -73,20 +59,10 @@ public class CloudClientBuilder {
     Checks.checkNotNull(stage, "Stage");
     Checks.checkNotNull(mainSceneLocation, "Main Scene Location");
     Checks.checkNotNull(loginSceneLocation, "Login Scene Location");
-    Checks.checkNotNull(sslKeyStore, "SSL KeyStore");
-    Checks.checkNotNull(sslKeyPass, "SSL KeyStore pass");
-    Checks.checkNotEmpty(sslKeyPass, "SSL KeyStore pass");
 
     CloudClient client =
         new CloudClientImpl(
-            host,
-            port,
-            stage,
-            new AppStorage("cloud-app"),
-            sslKeyStore,
-            sslKeyPass,
-            mainSceneLocation,
-            loginSceneLocation);
+            host, port, stage, new AppStorage("cloud-app"), mainSceneLocation, loginSceneLocation);
 
     if (!delayedLaunch) {
       client.launch();

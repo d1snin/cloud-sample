@@ -10,7 +10,6 @@ import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.handler.codec.serialization.ClassResolvers;
 import io.netty.handler.codec.serialization.ObjectDecoder;
 import io.netty.handler.codec.serialization.ObjectEncoder;
-import io.netty.handler.ssl.SslHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
@@ -25,11 +24,8 @@ import xyz.d1snin.client.handlers.ResponseHandler;
 import xyz.d1snin.client.internal.managers.RequestManagerImpl;
 import xyz.d1snin.client.internal.managers.SessionManagerImpl;
 import xyz.d1snin.client.storage.AppStorage;
-import xyz.d1snin.commons.utils.SslUtils;
 
-import javax.net.ssl.SSLEngine;
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.URL;
 import java.util.Objects;
 import java.util.concurrent.Executors;
@@ -40,8 +36,6 @@ public class CloudClientImpl implements CloudClient {
   private final int port;
   private final Stage stage;
   private final AppStorage appStorage;
-  private final InputStream sslKeyStore;
-  private final String sslKeyPass;
   private final URL mainSceneLocation;
   private final URL loginSceneLocation;
 
@@ -54,16 +48,12 @@ public class CloudClientImpl implements CloudClient {
       int port,
       Stage stage,
       AppStorage appStorage,
-      InputStream sslKeyStore,
-      String sslKeyPass,
       URL mainSceneLocation,
       URL loginSceneLocation) {
     this.host = host;
     this.port = port;
     this.stage = stage;
     this.appStorage = appStorage;
-    this.sslKeyStore = sslKeyStore;
-    this.sslKeyPass = sslKeyPass;
     this.mainSceneLocation = mainSceneLocation;
     this.loginSceneLocation = loginSceneLocation;
   }
@@ -96,9 +86,6 @@ public class CloudClientImpl implements CloudClient {
   @SneakyThrows
   @Override
   public void launch() {
-    SSLEngine engine =
-        SslUtils.createSslContext(sslKeyStore, sslKeyPass).createSSLEngine(host, port);
-    engine.setUseClientMode(true);
 
     EventLoopGroup group = new NioEventLoopGroup();
     Bootstrap boot = new Bootstrap();
@@ -113,7 +100,6 @@ public class CloudClientImpl implements CloudClient {
               protected void initChannel(SocketChannel ch) {
                 ch.pipeline()
                     .addLast(
-                        new SslHandler(engine),
                         new ObjectEncoder(),
                         new ObjectDecoder(ClassResolvers.cacheDisabled(null)),
                         new ResponseHandler(cloudClient));

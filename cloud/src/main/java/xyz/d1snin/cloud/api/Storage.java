@@ -9,7 +9,7 @@ public interface Storage {
 
   Path getPath();
 
-  Path createFile(String fileName) throws IOException, IllegalArgumentException;
+  Path createFile(String fileName) throws IllegalArgumentException;
 
   Path createDirectory(String dirName) throws IllegalArgumentException;
 

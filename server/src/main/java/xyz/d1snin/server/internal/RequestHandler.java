@@ -2,7 +2,6 @@ package xyz.d1snin.server.internal;
 
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
-import io.netty.handler.ssl.SslHandler;
 import lombok.extern.slf4j.Slf4j;
 import xyz.d1snin.commons.server.CloudServer;
 import xyz.d1snin.commons.server_requests.ServerRequest;
@@ -14,19 +13,6 @@ public class RequestHandler extends SimpleChannelInboundHandler<ServerRequest> {
 
   public RequestHandler(CloudServer server) {
     this.server = server;
-  }
-
-  @Override
-  public void channelActive(ChannelHandlerContext ctx) {
-    ctx.pipeline()
-        .get(SslHandler.class)
-        .handshakeFuture()
-        .addListener(
-            it ->
-                log.info(
-                    "A new connection from a remote host {}, Session is protected by {} cipher suite.",
-                    ctx.channel().remoteAddress(),
-                    ctx.pipeline().get(SslHandler.class).engine().getSession().getCipherSuite()));
   }
 
   @Override
