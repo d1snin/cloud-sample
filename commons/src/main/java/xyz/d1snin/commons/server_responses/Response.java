@@ -10,7 +10,7 @@ import java.io.Serializable;
 @RequiredArgsConstructor
 public class Response implements Serializable {
   private final int responseCode;
-  private final String content;
+  private final Object content;
 
   @Setter private long requestId;
 }

@@ -13,6 +13,7 @@ import io.netty.handler.codec.serialization.ObjectDecoder;
 import io.netty.handler.codec.serialization.ObjectEncoder;
 import lombok.extern.slf4j.Slf4j;
 import xyz.d1snin.cloud.api.Cloud;
+import xyz.d1snin.commons.managers.ClientSessionsManager;
 import xyz.d1snin.commons.server.CloudServer;
 
 @Slf4j
@@ -20,12 +21,14 @@ public class CloudServerImpl implements CloudServer {
 
   private final int port;
   private final Cloud cloud;
+  private final ClientSessionsManager clientSessionsManager;
 
   private Channel channel;
 
-  public CloudServerImpl(int port, Cloud cloud) {
+  public CloudServerImpl(int port, Cloud cloud, ClientSessionsManager clientSessionsManager) {
     this.port = port;
     this.cloud = cloud;
+    this.clientSessionsManager = clientSessionsManager;
   }
 
   @Override
@@ -36,6 +39,11 @@ public class CloudServerImpl implements CloudServer {
   @Override
   public Cloud getCloud() {
     return cloud;
+  }
+
+  @Override
+  public ClientSessionsManager getClientSessionsManager() {
+    return clientSessionsManager;
   }
 
   @Override

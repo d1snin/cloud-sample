@@ -2,7 +2,6 @@ package xyz.d1snin.client.internal.managers;
 
 import io.netty.channel.Channel;
 import lombok.NonNull;
-import lombok.SneakyThrows;
 import xyz.d1snin.client.api.managers.RequestManager;
 import xyz.d1snin.commons.server_requests.ServerRequest;
 import xyz.d1snin.commons.server_responses.Response;
@@ -11,14 +10,11 @@ import java.util.concurrent.*;
 
 public class RequestManagerImpl implements RequestManager {
 
-  private final ExecutorService executor;
-  private final CopyOnWriteArrayList<Response> responses;
+  private final ExecutorService executor = Executors.newCachedThreadPool();
+  private final CopyOnWriteArrayList<Response> responses = new CopyOnWriteArrayList<>();
   private final Channel channel;
 
-  @SneakyThrows
   public RequestManagerImpl(Channel channel) {
-    executor = Executors.newCachedThreadPool();
-    responses = new CopyOnWriteArrayList<>();
     this.channel = channel;
   }
 
@@ -32,7 +28,7 @@ public class RequestManagerImpl implements RequestManager {
 
           try {
             channel.writeAndFlush(request).sync();
-          } catch (Exception e) {
+          } catch (InterruptedException e) {
             e.printStackTrace();
           }
 

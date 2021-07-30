@@ -1,10 +1,10 @@
 package xyz.d1snin.client.api;
 
+import com.google.gson.Gson;
 import io.netty.channel.Channel;
 import javafx.stage.Stage;
 import xyz.d1snin.client.api.managers.RequestManager;
 import xyz.d1snin.client.api.managers.SessionManager;
-import xyz.d1snin.client.storage.AppStorage;
 
 public interface CloudClient {
 
@@ -12,11 +12,13 @@ public interface CloudClient {
 
   Channel getChannel();
 
-  AppStorage getAppStorage();
-
   SessionManager getSessionManager();
 
   RequestManager getRequestManager();
+
+  String getClientId();
+
+  Gson getGson();
 
   void launch();
 }

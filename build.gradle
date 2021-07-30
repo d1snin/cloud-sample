@@ -27,6 +27,11 @@ allprojects {
     test {
         useJUnitPlatform()
     }
+
+    wrapper {
+        version = "7.1.1"
+    }
+
 }
 
 project("client") {

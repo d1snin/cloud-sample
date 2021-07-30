@@ -19,9 +19,13 @@ public abstract class ServerRequest implements Serializable {
 
   public abstract void execute(CloudServer server, ChannelHandlerContext ctx);
 
-  protected void sendResponse(int responseCode, String content) {
+  protected void sendResponse(int responseCode, Object content) {
     Response response = new Response(responseCode, content);
     response.setRequestId(requestId);
     ctx.writeAndFlush(response);
+  }
+
+  protected void sendResponse(int responseCode) {
+    sendResponse(responseCode, null);
   }
 }

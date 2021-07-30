@@ -1,5 +1,6 @@
 package xyz.d1snin.client.internal;
 
+import com.google.gson.Gson;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelInitializer;
@@ -23,7 +24,8 @@ import xyz.d1snin.client.controllers.MainSceneController;
 import xyz.d1snin.client.handlers.ResponseHandler;
 import xyz.d1snin.client.internal.managers.RequestManagerImpl;
 import xyz.d1snin.client.internal.managers.SessionManagerImpl;
-import xyz.d1snin.client.storage.AppStorage;
+import xyz.d1snin.commons.server_requests.user.UserIdRequest;
+import xyz.d1snin.commons.server_responses.model.user.UserIdData;
 
 import java.io.IOException;
 import java.net.URL;
@@ -35,27 +37,28 @@ public class CloudClientImpl implements CloudClient {
   private final String host;
   private final int port;
   private final Stage stage;
-  private final AppStorage appStorage;
   private final URL mainSceneLocation;
   private final URL loginSceneLocation;
+  private final Gson gson;
 
   private Channel channel;
   private RequestManager requestManager;
   private SessionManager sessionManager;
+  private String clientId;
 
   public CloudClientImpl(
       String host,
       int port,
       Stage stage,
-      AppStorage appStorage,
       URL mainSceneLocation,
-      URL loginSceneLocation) {
+      URL loginSceneLocation,
+      Gson gson) {
     this.host = host;
     this.port = port;
     this.stage = stage;
-    this.appStorage = appStorage;
     this.mainSceneLocation = mainSceneLocation;
     this.loginSceneLocation = loginSceneLocation;
+    this.gson = gson;
   }
 
   @Override
@@ -69,11 +72,6 @@ public class CloudClientImpl implements CloudClient {
   }
 
   @Override
-  public AppStorage getAppStorage() {
-    return appStorage;
-  }
-
-  @Override
   public SessionManager getSessionManager() {
     return sessionManager;
   }
@@ -81,6 +79,16 @@ public class CloudClientImpl implements CloudClient {
   @Override
   public RequestManager getRequestManager() {
     return requestManager;
+  }
+
+  @Override
+  public String getClientId() {
+    return clientId;
+  }
+
+  @Override
+  public Gson getGson() {
+    return gson;
   }
 
   @SneakyThrows
@@ -109,7 +117,11 @@ public class CloudClientImpl implements CloudClient {
     this.channel = boot.connect(host, port).sync().channel();
 
     this.requestManager = new RequestManagerImpl(channel);
-    this.sessionManager = new SessionManagerImpl(requestManager, appStorage);
+    this.sessionManager = new SessionManagerImpl(requestManager);
+
+    this.clientId =
+        ((UserIdData) requestManager.submitRequest(new UserIdRequest()).get().getContent())
+            .getUserId();
 
     Image icon =
         new Image(Objects.requireNonNull(getClass().getResourceAsStream("/cloud-computing.png")));
@@ -121,15 +133,16 @@ public class CloudClientImpl implements CloudClient {
 
     FXMLLoader mainLoader = new FXMLLoader();
     mainLoader.setLocation(mainSceneLocation);
-    mainLoader.setController(new MainSceneController(requestManager));
+    mainLoader.setController(new MainSceneController(this));
 
     FXMLLoader loginLoader = new FXMLLoader();
     loginLoader.setLocation(loginSceneLocation);
-    loginLoader.setController(new LoginSceneController(sessionManager, stage, mainLoader));
+    loginLoader.setController(
+        new LoginSceneController(sessionManager, cloudClient, stage, mainLoader));
 
     try {
       stage.setScene(
-          new Scene(sessionManager.isAuthenticated() ? mainLoader.load() : loginLoader.load()));
+          new Scene(sessionManager.isSessionActive() ? mainLoader.load() : loginLoader.load()));
     } catch (IOException e) {
       e.printStackTrace();
     }

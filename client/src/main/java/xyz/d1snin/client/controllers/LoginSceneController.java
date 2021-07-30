@@ -1,5 +1,6 @@
 package xyz.d1snin.client.controllers;
 
+import io.netty.channel.Channel;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -9,11 +10,13 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import lombok.SneakyThrows;
+import xyz.d1snin.client.api.CloudClient;
 import xyz.d1snin.client.api.managers.SessionManager;
 
 public class LoginSceneController {
 
   private final SessionManager sessionManager;
+  private final CloudClient cloudClient;
   private final Stage stage;
   private final FXMLLoader mainSceneLoader;
 
@@ -27,8 +30,12 @@ public class LoginSceneController {
   @FXML private Label log_label_reg;
 
   public LoginSceneController(
-      SessionManager sessionManager, Stage stage, FXMLLoader mainSceneLoader) {
+      SessionManager sessionManager,
+      CloudClient cloudClient,
+      Stage stage,
+      FXMLLoader mainSceneLoader) {
     this.sessionManager = sessionManager;
+    this.cloudClient = cloudClient;
     this.stage = stage;
     this.mainSceneLoader = mainSceneLoader;
   }
@@ -77,5 +84,12 @@ public class LoginSceneController {
     stage.setScene(new Scene(root));
     stage.show();
     stage.requestFocus();
+
+    stage.setOnCloseRequest(
+        e -> {
+          Channel channel = cloudClient.getChannel();
+          channel.disconnect();
+          channel.close();
+        });
   }
 }

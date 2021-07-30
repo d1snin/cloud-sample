@@ -1,9 +1,9 @@
 package xyz.d1snin.client.api;
 
+import com.google.gson.GsonBuilder;
 import javafx.stage.Stage;
 import lombok.NonNull;
 import xyz.d1snin.client.internal.CloudClientImpl;
-import xyz.d1snin.client.storage.AppStorage;
 import xyz.d1snin.client.utils.Checks;
 
 import java.net.URL;
@@ -62,7 +62,12 @@ public class CloudClientBuilder {
 
     CloudClient client =
         new CloudClientImpl(
-            host, port, stage, new AppStorage("cloud-app"), mainSceneLocation, loginSceneLocation);
+            host,
+            port,
+            stage,
+            mainSceneLocation,
+            loginSceneLocation,
+            new GsonBuilder().setPrettyPrinting().create());
 
     if (!delayedLaunch) {
       client.launch();

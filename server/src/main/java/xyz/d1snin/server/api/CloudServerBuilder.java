@@ -4,6 +4,7 @@ import xyz.d1snin.cloud.api.Cloud;
 import xyz.d1snin.cloud.utils.Checks;
 import xyz.d1snin.commons.server.CloudServer;
 import xyz.d1snin.server.internal.CloudServerImpl;
+import xyz.d1snin.server.internal.managers.ClientSessionManagerImpl;
 
 public class CloudServerBuilder {
 
@@ -28,7 +29,7 @@ public class CloudServerBuilder {
   public CloudServer buildServerInstance(boolean delayedLaunch) {
     Checks.checkNotNull(cloud, "Cloud");
 
-    CloudServer server = new CloudServerImpl(port, cloud);
+    CloudServer server = new CloudServerImpl(port, cloud, new ClientSessionManagerImpl());
 
     if (!delayedLaunch) {
       server.launch();
