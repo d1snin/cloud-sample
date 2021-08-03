@@ -13,22 +13,19 @@ import java.nio.file.Files;
 public class FileUploadRequest extends ServerRequest implements Serializable {
 
   private final byte[] bytes;
-  private final String fileName;
-  private final String userId;
+  private final String filePath;
 
-  public FileUploadRequest(byte[] bytes, String fileName, String userId) {
+  public FileUploadRequest(byte[] bytes, String filePath) {
     this.bytes = bytes;
-    this.fileName = fileName;
-    this.userId = userId;
+    this.filePath = filePath;
   }
 
   @Override
   public void execute(CloudServer server, ChannelHandlerContext ctx) {
-    // TODO: make it more resistant to errors
-    Storage storage = server.getCloud().getUserById(userId).getUserStorage();
+    Storage storage = server.getCloud().getUserByToken(getAuthenticationToken()).getUserStorage();
 
     try {
-      Files.write(storage.createFile(storage.resolvePath(fileName)), bytes);
+      Files.write(storage.createFile(storage.resolvePath(filePath)), bytes);
     } catch (IOException e) {
       e.printStackTrace();
       sendResponse(ResponseCodes.UPLOADING_FAILED);

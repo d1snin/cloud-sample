@@ -13,5 +13,7 @@ public interface Cloud {
 
   User loginUser(String login, String password) throws IllegalArgumentException;
 
-  User getUserById(String id) throws IllegalArgumentException;
+  User getUserById(String id);
+
+  User getUserByToken(String token);
 }

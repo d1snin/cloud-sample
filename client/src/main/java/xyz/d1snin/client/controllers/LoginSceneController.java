@@ -48,7 +48,8 @@ public class LoginSceneController {
     }
 
     try {
-      sessionManager.login(username_field_login.getText(), pass_field_login.getText());
+      cloudClient.setAuthenticationToken(
+          sessionManager.login(username_field_login.getText(), pass_field_login.getText()));
       changeScene();
     } catch (IllegalArgumentException e) {
       log_label_login.setText(e.getMessage());
@@ -70,7 +71,8 @@ public class LoginSceneController {
     }
 
     try {
-      sessionManager.register(username_field_reg.getText(), pass_field_repeat_reg.getText());
+      cloudClient.setAuthenticationToken(
+          sessionManager.register(username_field_reg.getText(), pass_field_repeat_reg.getText()));
       changeScene();
     } catch (IllegalArgumentException e) {
       log_label_reg.setText("This user name is already occupied.");

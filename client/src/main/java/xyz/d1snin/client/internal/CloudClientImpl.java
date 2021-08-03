@@ -24,8 +24,6 @@ import xyz.d1snin.client.controllers.MainSceneController;
 import xyz.d1snin.client.handlers.ResponseHandler;
 import xyz.d1snin.client.internal.managers.RequestManagerImpl;
 import xyz.d1snin.client.internal.managers.SessionManagerImpl;
-import xyz.d1snin.commons.server_requests.user.UserIdRequest;
-import xyz.d1snin.commons.server_responses.model.user.UserIdData;
 
 import java.io.IOException;
 import java.net.URL;
@@ -44,7 +42,7 @@ public class CloudClientImpl implements CloudClient {
   private Channel channel;
   private RequestManager requestManager;
   private SessionManager sessionManager;
-  private String clientId;
+  private String authenticationToken;
 
   public CloudClientImpl(
       String host,
@@ -82,8 +80,13 @@ public class CloudClientImpl implements CloudClient {
   }
 
   @Override
-  public String getClientId() {
-    return clientId;
+  public String getAuthenticationToken() {
+    return authenticationToken;
+  }
+
+  @Override
+  public void setAuthenticationToken(String authenticationToken) {
+    this.authenticationToken = authenticationToken;
   }
 
   @Override
@@ -116,12 +119,13 @@ public class CloudClientImpl implements CloudClient {
 
     this.channel = boot.connect(host, port).sync().channel();
 
-    this.requestManager = new RequestManagerImpl(channel);
+    this.requestManager = new RequestManagerImpl(this);
     this.sessionManager = new SessionManagerImpl(requestManager);
 
-    this.clientId =
-        ((UserIdData) requestManager.submitRequest(new UserIdRequest()).get().getContent())
-            .getUserId();
+    if (sessionManager.isSessionActive()) {
+      this.authenticationToken = sessionManager.retrieveAuthenticationToken();
+      sessionManager.registerSession();
+    }
 
     Image icon =
         new Image(Objects.requireNonNull(getClass().getResourceAsStream("/cloud-computing.png")));

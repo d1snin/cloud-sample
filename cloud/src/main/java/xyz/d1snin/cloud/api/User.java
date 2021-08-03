@@ -9,4 +9,6 @@ public interface User {
   String getUserLogin();
 
   String getUserPassword();
+
+  String getAuthenticationToken();
 }

@@ -28,11 +28,7 @@ public class MainSceneController {
       File file = chooser.getSelectedFile();
       client
           .getRequestManager()
-          .submitRequest(
-              new FileUploadRequest(
-                  Files.readAllBytes(file.toPath()), file.getName(), client.getClientId()));
-
-
+          .submitRequest(new FileUploadRequest(Files.readAllBytes(file.toPath()), file.getName()));
     }
   }
 

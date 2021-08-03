@@ -1,7 +1,7 @@
 package xyz.d1snin.client.internal.managers;
 
-import io.netty.channel.Channel;
 import lombok.NonNull;
+import xyz.d1snin.client.api.CloudClient;
 import xyz.d1snin.client.api.managers.RequestManager;
 import xyz.d1snin.commons.server_requests.ServerRequest;
 import xyz.d1snin.commons.server_responses.Response;
@@ -12,10 +12,10 @@ public class RequestManagerImpl implements RequestManager {
 
   private final ExecutorService executor = Executors.newCachedThreadPool();
   private final CopyOnWriteArrayList<Response> responses = new CopyOnWriteArrayList<>();
-  private final Channel channel;
+  private final CloudClient cloudClient;
 
-  public RequestManagerImpl(Channel channel) {
-    this.channel = channel;
+  public RequestManagerImpl(CloudClient cloudClient) {
+    this.cloudClient = cloudClient;
   }
 
   @Override
@@ -25,9 +25,10 @@ public class RequestManagerImpl implements RequestManager {
           long requestId = ThreadLocalRandom.current().nextInt(100000000, 999999999 + 1);
 
           request.setRequestId(requestId);
+          request.setAuthenticationToken(cloudClient.getAuthenticationToken());
 
           try {
-            channel.writeAndFlush(request).sync();
+            cloudClient.getChannel().writeAndFlush(request).sync();
           } catch (InterruptedException e) {
             e.printStackTrace();
           }

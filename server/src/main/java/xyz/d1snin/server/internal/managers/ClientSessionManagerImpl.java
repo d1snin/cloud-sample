@@ -16,6 +16,7 @@ public class ClientSessionManagerImpl implements ClientSessionsManager {
   @Override
   public ClientSession registerNewSession(SocketAddress address, User user) {
     ClientSession session = new ClientSession(address, user);
+    session.setActive(true);
     sessions.add(session);
     return session;
   }

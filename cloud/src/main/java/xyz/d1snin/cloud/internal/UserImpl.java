@@ -10,11 +10,14 @@ public class UserImpl implements User {
   private final String login;
   private final String password;
   private final Storage storage;
+  private final String authenticationToken;
 
-  public UserImpl(String id, String login, String password, Cloud cloud) {
+  public UserImpl(
+      String id, String login, String password, String authenticationToken, Cloud cloud) {
     this.id = id;
     this.login = login;
     this.password = password;
+    this.authenticationToken = authenticationToken;
     storage = new StorageImpl(this, cloud);
   }
 
@@ -36,5 +39,10 @@ public class UserImpl implements User {
   @Override
   public String getUserPassword() {
     return password;
+  }
+
+  @Override
+  public String getAuthenticationToken() {
+    return authenticationToken;
   }
 }

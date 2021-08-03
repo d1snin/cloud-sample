@@ -6,5 +6,5 @@ import java.io.Serializable;
 
 @Data
 public class AuthenticationData implements Serializable {
-  private final String userId;
+  private final String authenticationToken;
 }

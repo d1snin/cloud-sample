@@ -16,7 +16,9 @@ public interface CloudClient {
 
   RequestManager getRequestManager();
 
-  String getClientId();
+  String getAuthenticationToken();
+
+  void setAuthenticationToken(String authenticationToken);
 
   Gson getGson();
 

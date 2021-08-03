@@ -1,13 +1,14 @@
 package xyz.d1snin.client.internal.managers;
 
-import com.google.gson.internal.bind.util.ISO8601Utils;
 import lombok.NonNull;
 import lombok.SneakyThrows;
 import xyz.d1snin.client.api.managers.RequestManager;
 import xyz.d1snin.client.api.managers.SessionManager;
+import xyz.d1snin.commons.server_requests.auth.AuthenticationTokenRequest;
 import xyz.d1snin.commons.server_requests.auth.LoginRequest;
 import xyz.d1snin.commons.server_requests.auth.RegistrationRequest;
 import xyz.d1snin.commons.server_requests.session.SessionActiveRequest;
+import xyz.d1snin.commons.server_requests.session.SessionRegistrationRequest;
 import xyz.d1snin.commons.server_responses.Response;
 import xyz.d1snin.commons.server_responses.ResponseCodes;
 import xyz.d1snin.commons.server_responses.model.auth.AuthenticationData;
@@ -38,7 +39,7 @@ public class SessionManagerImpl implements SessionManager {
       throw new IllegalArgumentException("Invalid login or password.");
     }
 
-    return ((AuthenticationData) response.getContent()).getUserId();
+    return ((AuthenticationData) response.getContent()).getAuthenticationToken();
   }
 
   @Override
@@ -51,6 +52,21 @@ public class SessionManagerImpl implements SessionManager {
       throw new IllegalArgumentException("Invalid login or password.");
     }
 
-    return ((AuthenticationData) response.getContent()).getUserId();
+    return ((AuthenticationData) response.getContent()).getAuthenticationToken();
+  }
+
+  @Override
+  public void registerSession() {
+    requestManager.submitRequest(new SessionRegistrationRequest());
+  }
+
+  @Override
+  @SneakyThrows
+  public String retrieveAuthenticationToken() {
+    return isSessionActive()
+        ? ((AuthenticationData)
+                requestManager.submitRequest(new AuthenticationTokenRequest()).get().getContent())
+            .getAuthenticationToken()
+        : null;
   }
 }
