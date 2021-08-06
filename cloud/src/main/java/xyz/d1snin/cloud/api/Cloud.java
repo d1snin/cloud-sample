@@ -9,11 +9,11 @@ public interface Cloud {
 
   List<User> getUsers();
 
-  User createNewUser(String login, String password)
-      throws IllegalArgumentException, IllegalAccessException;
+  User createNewUser(String login, String password) throws IllegalArgumentException;
 
-  User loginUser(String login, String password)
-      throws IllegalArgumentException, IllegalAccessException;
+  User loginUser(String login, String password) throws IllegalArgumentException;
 
-  User getUserById(String id) throws IllegalArgumentException;
+  User getUserById(String id);
+
+  User getUserByToken(String token);
 }

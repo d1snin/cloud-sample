@@ -11,30 +11,25 @@ import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.handler.codec.serialization.ClassResolvers;
 import io.netty.handler.codec.serialization.ObjectDecoder;
 import io.netty.handler.codec.serialization.ObjectEncoder;
-import io.netty.handler.ssl.SslHandler;
 import lombok.extern.slf4j.Slf4j;
 import xyz.d1snin.cloud.api.Cloud;
-import xyz.d1snin.server.shared.utils.SslUtils;
-import xyz.d1snin.server.api.CloudServer;
-
-import javax.net.ssl.SSLEngine;
-import java.io.InputStream;
+import xyz.d1snin.commons.managers.ClientSessionsManager;
+import xyz.d1snin.commons.server.CloudServer;
+import xyz.d1snin.server.handlers.RequestHandler;
 
 @Slf4j
 public class CloudServerImpl implements CloudServer {
 
   private final int port;
   private final Cloud cloud;
-  private final InputStream keyStore;
-  private final String sslKeyPass;
+  private final ClientSessionsManager clientSessionsManager;
 
   private Channel channel;
 
-  public CloudServerImpl(int port, Cloud cloud, InputStream keyStore, String sslKeyPass) {
+  public CloudServerImpl(int port, Cloud cloud, ClientSessionsManager clientSessionsManager) {
     this.port = port;
     this.cloud = cloud;
-    this.keyStore = keyStore;
-    this.sslKeyPass = sslKeyPass;
+    this.clientSessionsManager = clientSessionsManager;
   }
 
   @Override
@@ -48,13 +43,15 @@ public class CloudServerImpl implements CloudServer {
   }
 
   @Override
+  public ClientSessionsManager getClientSessionsManager() {
+    return clientSessionsManager;
+  }
+
+  @Override
   public void launch() {
 
     EventLoopGroup auth = new NioEventLoopGroup(1);
     EventLoopGroup worker = new NioEventLoopGroup();
-
-    SSLEngine engine = SslUtils.createSslContext(keyStore, sslKeyPass).createSSLEngine();
-    engine.setUseClientMode(false);
 
     try {
       CloudServer server = this;
@@ -70,7 +67,6 @@ public class CloudServerImpl implements CloudServer {
                     protected void initChannel(SocketChannel ch) {
                       ch.pipeline()
                           .addLast(
-                              new SslHandler(engine),
                               new ObjectDecoder(ClassResolvers.cacheDisabled(null)),
                               new ObjectEncoder(),
                               new RequestHandler(server));

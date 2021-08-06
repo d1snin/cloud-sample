@@ -3,41 +3,69 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Font?>
-<TabPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0"
-         prefWidth="600.0" tabClosingPolicy="UNAVAILABLE" xmlns:fx="http://javafx.com/fxml/1"
-         xmlns="http://javafx.com/javafx/16" fx:controller="xyz.d1snin.client.controllers.LoginSceneController">
+<TabPane xmlns:fx="http://javafx.com/fxml/1" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+         prefHeight="400.0" prefWidth="600.0" stylesheets="login.css" tabClosingPolicy="UNAVAILABLE"
+         xmlns="http://javafx.com/javafx/16">
     <Tab text="Login">
-        <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
-            <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
-                <Image url="@cloud-computing.png"/>
-            </ImageView>
-            <TextField fx:id="login_field_login" prefHeight="28.0" prefWidth="300.0" promptText="Login..."/>
-            <PasswordField fx:id="pass_field_login" prefHeight="26.0" prefWidth="300.0" promptText="Password..."/>
-            <Button fx:id="login_button" mnemonicParsing="false" prefHeight="30.0" prefWidth="149.0" text="Login"
-                    onAction="#login">
-                <font>
-                    <Font name="Ubuntu" size="19.0"/>
-                </font>
-            </Button>
-        </VBox>
+        <BorderPane prefHeight="200.0" prefWidth="200.0">
+            <center>
+                <HBox alignment="CENTER" prefHeight="341.0" prefWidth="600.0" BorderPane.alignment="CENTER">
+                    <VBox alignment="CENTER" prefHeight="369.0" prefWidth="275.0" styleClass="v-box">
+                        <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+                            <Image url="@cloud-computing.png"/>
+                        </ImageView>
+                        <TextField fx:id="username_field_login" prefHeight="47.0" prefWidth="275.0"
+                                   promptText="Username..."/>
+                        <PasswordField fx:id="pass_field_login" layoutX="10.0" layoutY="226.0" prefHeight="47.0"
+                                       prefWidth="275.0" promptText="Password..."/>
+                        <Button id="login_button" alignment="CENTER" mnemonicParsing="false" onAction="#login"
+                                prefHeight="41.0" prefWidth="169.0" text="Login">
+                            <font>
+                                <Font size="22.0"/>
+                            </font>
+                        </Button>
+                    </VBox>
+                </HBox>
+            </center>
+            <bottom>
+                <Label fx:id="log_label_login" alignment="CENTER" contentDisplay="CENTER" prefHeight="28.0"
+                       prefWidth="605.0" textAlignment="CENTER" textFill="RED" BorderPane.alignment="CENTER">
+                    <font>
+                        <Font size="15.0"/>
+                    </font>
+                </Label>
+            </bottom>
+        </BorderPane>
     </Tab>
     <Tab text="Register">
-        <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
-            <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
-                <Image url="@cloud-computing.png"/>
-            </ImageView>
-            <TextField fx:id="login_field_reg" prefHeight="28.0" prefWidth="300.0" promptText="Login..."/>
-            <PasswordField fx:id="pass_field_reg" prefHeight="26.0" prefWidth="300.0" promptText="Password..."/>
-            <PasswordField fx:id="pass_field_repeat_reg" layoutX="10.0" layoutY="253.0" prefHeight="26.0"
-                           prefWidth="300.0"
-                           promptText="Password Repeat..."/>
-            <Button fx:id="register_button" mnemonicParsing="false" prefHeight="30.0" prefWidth="149.0" text="Register" onAction="#register">
-                <font>
-                    <Font name="Ubuntu" size="19.0"/>
-                </font>
-            </Button>
-        </VBox>
+        <BorderPane prefHeight="200.0" prefWidth="200.0">
+            <center>
+                <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+                    <VBox alignment="CENTER" prefHeight="369.0" prefWidth="275.0" styleClass="v-box">
+                        <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+                            <Image url="@cloud-computing.png"/>
+                        </ImageView>
+                        <TextField fx:id="username_field_reg" prefHeight="47.0" prefWidth="275.0"
+                                   promptText="Username..."/>
+                        <PasswordField fx:id="pass_field_reg" layoutX="10.0" layoutY="226.0" prefHeight="47.0"
+                                       prefWidth="275.0" promptText="Password..."/>
+                        <PasswordField fx:id="pass_field_repeat_reg" layoutX="10.0" layoutY="249.0" prefHeight="47.0"
+                                       prefWidth="275.0" promptText="Password Repeat..."/>
+                        <Button alignment="CENTER" mnemonicParsing="false" onAction="#register" prefHeight="41.0"
+                                prefWidth="169.0" text="Login">
+                            <font>
+                                <Font size="22.0"/>
+                            </font>
+                        </Button>
+                    </VBox>
+                </HBox>
+            </center>
+            <bottom>
+                <Label fx:id="log_label_reg" prefHeight="28.0" prefWidth="252.0" textAlignment="CENTER" textFill="RED"
+                       BorderPane.alignment="CENTER"/>
+            </bottom>
+        </BorderPane>
     </Tab>
 </TabPane>

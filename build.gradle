@@ -27,11 +27,23 @@ allprojects {
     test {
         useJUnitPlatform()
     }
+
+    wrapper {
+        version = "7.1.1"
+    }
+
 }
 
 project("client") {
     apply plugin: "application"
 
+    dependencies {
+        implementation "io.netty:netty-all:$netty_version"
+        implementation "com.google.code.gson:gson:$gson_version"
+    }
+}
+
+project("commons") {
     dependencies {
         implementation "io.netty:netty-all:$netty_version"
         implementation "com.google.code.gson:gson:$gson_version"

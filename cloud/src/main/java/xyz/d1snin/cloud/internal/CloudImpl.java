@@ -10,10 +10,11 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.security.SecureRandom;
+import java.util.Base64;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.concurrent.ThreadLocalRandom;
-import java.util.stream.Stream;
+import java.util.UUID;
 
 @Slf4j
 public class CloudImpl implements Cloud {
@@ -59,6 +60,7 @@ public class CloudImpl implements Cloud {
               (String) current.get("id"),
               (String) current.get("login"),
               (String) current.get("password"),
+              (String) current.get("token"),
               this));
     }
 
@@ -66,36 +68,40 @@ public class CloudImpl implements Cloud {
   }
 
   @Override
-  public User createNewUser(String login, String password) throws IllegalAccessException {
+  public User createNewUser(String login, String password) throws IllegalArgumentException {
     Checks.checkNotNull(login, "Login");
     Checks.checkNotEmpty(login, "Login");
     Checks.checkNotNull(password, "Password");
     Checks.checkNotEmpty(password, "Password");
 
-    int newUserId;
+    String newUserId;
 
     do {
-      newUserId = ThreadLocalRandom.current().nextInt(100000000, 999999999 + 1);
+      newUserId = UUID.randomUUID().toString();
     } while (usersCollection.count(new BasicDBObject("id", newUserId)) > 0);
 
-    User newUser = new UserImpl(String.valueOf(newUserId), login, password, this);
+    byte[] randomBytes = new byte[24];
+    new SecureRandom().nextBytes(randomBytes);
+    String token = Base64.getUrlEncoder().encodeToString(randomBytes);
+
+    User newUser = new UserImpl(newUserId, login, password, token, this);
 
     if (usersCollection.count(new BasicDBObject("login", login)) > 0) {
-      throw new IllegalAccessException("User with this login already exists.");
+      throw new IllegalArgumentException("User with this login already exists.");
     }
 
     usersCollection.insert(
         new BasicDBObject()
             .append("id", newUser.getUserId())
             .append("login", newUser.getUserLogin())
-            .append("password", newUser.getUserPassword()));
+            .append("password", newUser.getUserPassword())
+            .append("token", newUser.getAuthenticationToken()));
 
     return newUser;
   }
 
   @Override
-  public User loginUser(String login, String password)
-      throws IllegalArgumentException, IllegalAccessException {
+  public User loginUser(String login, String password) throws IllegalArgumentException {
     Checks.checkNotNull(login, "Login");
     Checks.checkNotEmpty(login, "Login");
     Checks.checkNotNull(password, "Password");
@@ -105,14 +111,18 @@ public class CloudImpl implements Cloud {
         usersCollection.find(
             new BasicDBObject().append("login", login).append("password", password));
     if (!cursor.hasNext()) {
-      throw new IllegalAccessException(
+      throw new IllegalArgumentException(
           "Can not login this user because login or password is invalid.");
 
     } else {
       DBObject user = cursor.next();
 
       return new UserImpl(
-          (String) user.get("id"), (String) user.get("login"), (String) user.get("password"), this);
+          (String) user.get("id"),
+          (String) user.get("login"),
+          (String) user.get("password"),
+          (String) user.get("token"),
+          this);
     }
   }
 
@@ -121,12 +131,17 @@ public class CloudImpl implements Cloud {
     Checks.checkNotNull(id, "ID");
     Checks.checkNotEmpty(id, "ID");
 
-    Stream<User> users = getUsers().stream();
-    if (users.noneMatch(it -> it.getUserId().equals(id))) {
-      throw new IllegalArgumentException("Can not find user by id: " + id);
+    return getUsers().stream().filter(it -> it.getUserId().equals(id)).findFirst().orElse(null);
+  }
 
-    } else {
-      return users.filter(it -> it.getUserId().equals(id)).iterator().next();
-    }
+  @Override
+  public User getUserByToken(String token) {
+    Checks.checkNotNull(token, "Auth Token");
+    Checks.checkNotEmpty(token, "Auth Token");
+
+    return getUsers().stream()
+        .filter(it -> it.getAuthenticationToken().equals(token))
+        .findFirst()
+        .orElse(null);
   }
 }

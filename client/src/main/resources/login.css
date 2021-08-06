@@ -1,0 +1,32 @@
+.root {
+    -fx-background-color: black;
+    -fx-font-family: Ubuntu;
+}
+
+.tab-header-background {
+    -fx-background-color: black;
+}
+
+.tab {
+    -fx-background-color: #212121;
+    -fx-text-base-color: white;
+}
+
+.text-field {
+    text-area-background: black;
+    -fx-text-fill: #00f5ff;
+    -fx-background-color: #212121;
+}
+
+.text-field .content {
+    -fx-background-color: text-area-background;
+}
+
+.v-box {
+    -fx-spacing: 15px;
+}
+
+.button {
+    -fx-background-color: #212121;
+    -fx-text-fill: white;
+}

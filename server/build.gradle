@@ -1,3 +1,7 @@
+plugins {
+    id "com.github.johnrengelman.shadow" version "6.0.0"
+}
+
 group 'xyz.d1snin.server'
 version '1.0.0'
 
@@ -5,4 +9,5 @@ mainClassName = "xyz.d1snin.server.ServerApplication"
 
 dependencies {
     implementation project(":cloud")
+    implementation project(":commons")
 }

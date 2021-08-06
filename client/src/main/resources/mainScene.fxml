@@ -1,52 +1,71 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0"
-            prefWidth="600.0" stylesheets="main.css" xmlns="http://javafx.com/javafx/11.0.1"
-            xmlns:fx="http://javafx.com/fxml/1" fx:controller="xyz.d1snin.client.controllers.MainSceneController">
-    <bottom>
-        <TextArea fx:id="logs_area" editable="false" prefHeight="288.0" prefWidth="600.0" BorderPane.alignment="CENTER">
-            <font>
-                <Font name="JetBrains Mono Regular" size="15.0"/>
-            </font>
-        </TextArea>
-    </bottom>
-    <top>
-        <HBox id="h-box" alignment="CENTER" prefHeight="150.0" prefWidth="392.0" BorderPane.alignment="CENTER">
-            <AnchorPane prefHeight="150.0" prefWidth="194.0">
-                <ImageView id="cloud-image" fitHeight="150.0" fitWidth="165.0" layoutX="22.0" layoutY="25.0"
-                           pickOnBounds="true" preserveRatio="true">
-                    <Image url="@cloud-computing.png"/>
-                </ImageView>
-            </AnchorPane>
-            <AnchorPane prefHeight="150.0" prefWidth="369.0">
-                <VBox id="v-box" alignment="CENTER" prefHeight="200.0" prefWidth="367.0">
-                    <Button id="download_button" alignment="CENTER" mnemonicParsing="false" onAction="#download"
-                            prefHeight="43.0" prefWidth="230.0" text="Download File..." textAlignment="CENTER">
-                        <opaqueInsets>
-                            <Insets/>
-                        </opaqueInsets>
-                        <font>
-                            <Font name="Ubuntu" size="21.0"/>
-                        </font>
-                    </Button>
-                    <Button id="upload_button" alignment="CENTER" mnemonicParsing="false" onAction="#upload"
-                            prefHeight="44.0" prefWidth="230.0" text="Upload File..." textAlignment="CENTER">
-                        <opaqueInsets>
-                            <Insets/>
-                        </opaqueInsets>
-                        <font>
-                            <Font name="Ubuntu" size="21.0"/>
-                        </font>
-                    </Button>
-                </VBox>
-            </AnchorPane>
-        </HBox>
-    </top>
-</BorderPane>
+
+<TabPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" stylesheets="main.css" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1">
+    <tabs>
+        <Tab text="Main">
+            <content>
+                <BorderPane prefHeight="200.0" prefWidth="200.0">
+                    <center>
+                        <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+                            <children>
+                                <BorderPane prefHeight="369.0" prefWidth="255.0">
+                                    <center>
+                                        <ImageView fitHeight="150.0" fitWidth="159.0" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER">
+                                            <image>
+                                                <Image url="@cloud-computing.png" />
+                                            </image>
+                                        </ImageView>
+                                    </center>
+                                </BorderPane>
+                            </children>
+                        </HBox>
+                    </center>
+                    <right>
+                        <VBox id="v-box" alignment="CENTER" prefHeight="369.0" prefWidth="370.0" BorderPane.alignment="CENTER">
+                            <children>
+                                <Button fx:id="upload_button" mnemonicParsing="false" onAction="#upload" prefHeight="45.0" prefWidth="148.0" text="Upload" textAlignment="CENTER">
+                                    <font>
+                                        <Font size="24.0" />
+                                    </font>
+                                </Button>
+                                <Button fx:id="download_button" layoutX="132.0" layoutY="172.0" mnemonicParsing="false" onAction="#download" prefHeight="45.0" prefWidth="148.0" text="Download" textAlignment="CENTER">
+                                    <font>
+                                        <Font size="24.0" />
+                                    </font>
+                                </Button>
+                            </children>
+                        </VBox>
+                    </right>
+                    <bottom>
+                        <Label fx:id="msg_label" alignment="CENTER" contentDisplay="CENTER" prefHeight="64.0" prefWidth="608.0" textAlignment="CENTER" BorderPane.alignment="CENTER" />
+                    </bottom>
+                </BorderPane>
+            </content>
+        </Tab>
+        <Tab text="Logs">
+            <content>
+                <BorderPane prefHeight="200.0" prefWidth="200.0">
+                    <center>
+                        <TextArea fx:id="logs_area" editable="false" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+                            <font>
+                                <Font size="18.0" />
+                            </font>
+                        </TextArea>
+                    </center>
+                </BorderPane>
+            </content>
+        </Tab>
+    </tabs>
+</TabPane>

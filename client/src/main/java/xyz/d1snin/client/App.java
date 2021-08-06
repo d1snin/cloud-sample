@@ -15,6 +15,8 @@ public class App extends Application {
   @Override
   public void start(Stage stage) {
     new CloudClientBuilder()
+        .setHost("127.0.0.1")
+        .setPort(1569)
         .setStage(stage)
         .setMainSceneLocation(Objects.requireNonNull(getClass().getResource("/mainScene.fxml")))
         .setLoginSceneLocation(Objects.requireNonNull(getClass().getResource("/loginScene.fxml")))

@@ -1,0 +1,31 @@
+.root {
+    -fx-background-color: black;
+    -fx-font-family: Ubuntu;
+    -fx-font-size: 15px;
+}
+
+.list-view .list-cell:odd {
+    -fx-background-color: black;
+}
+
+.list-view .list-cell:even {
+    -fx-background-color: #212121;
+}
+
+.list-view .list-cell {
+    -fx-text-fill: white;
+}
+
+.list-view, .split-pane {
+    -fx-background-insets: 0;
+    -fx-padding: 0;
+}
+
+.button {
+    -fx-background-color: #212121;
+    -fx-text-fill: red;
+}
+
+#log_label {
+    -fx-text-fill: red;
+}

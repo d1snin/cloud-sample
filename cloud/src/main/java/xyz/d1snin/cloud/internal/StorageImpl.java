@@ -46,14 +46,19 @@ public class StorageImpl implements Storage {
   }
 
   @Override
-  public Path createFile(String fileName) throws IllegalArgumentException {
-    Checks.checkNotNull(fileName, "File name");
-    Checks.checkNotEmpty(fileName, "File name");
+  public Path createFile(Path path) throws IllegalArgumentException {
+    Checks.checkNotNull(path, "File path");
+
+    Path resolvedPath = this.path.resolve(path);
+
+    if (Files.exists(resolvedPath)) {
+      throw new IllegalArgumentException("File already exists");
+    }
 
     Path res = null;
 
     try {
-      res = Files.createFile(path.resolve(fileName));
+      res = Files.createFile(this.path.resolve(path));
     } catch (IOException e) {
       log.error(
           "An error occurred while tring to create a file in user storage. ({})", user.getUserId());
@@ -63,17 +68,26 @@ public class StorageImpl implements Storage {
   }
 
   @Override
-  public Path createDirectory(String dirName) throws IllegalArgumentException {
-    Checks.checkNotNull(dirName, "Directory name");
-    Checks.checkNotEmpty(dirName, "Directory name");
+  public Path createDirectory(Path path) throws IllegalArgumentException {
+    Checks.checkNotNull(path, "Directory path");
 
     Path res = null;
     try {
-      res = Files.createDirectory(path.resolve(dirName));
+      res = Files.createDirectory(this.path.resolve(path));
     } catch (IOException e) {
       e.printStackTrace();
     }
     return res;
+  }
+
+  @Override
+  public Path resolvePath(Path path) {
+    return this.path.resolve(path);
+  }
+
+  @Override
+  public Path resolvePath(String path) {
+    return this.path.resolve(path);
   }
 
   @Override
