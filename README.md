@@ -1,3 +1,7 @@
+![Lines of code](https://img.shields.io/tokei/lines/github/d1snin-dev/cloud-sample)
+[![License](https://img.shields.io/badge/License-BSD%202--Clause-orange.svg)](https://opensource.org/licenses/BSD-2-Clause)
+
+
 # *cloud-sample*
 
 *An instance of a cloud storage system written in Java using Netty framework. Uses the TCP protocol to transfer data
