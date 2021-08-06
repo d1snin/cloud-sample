@@ -1,9 +1,15 @@
 .root {
     -fx-background-color: black;
+    -fx-font-family: Ubuntu;
 }
 
 .tab-header-background {
+    -fx-background-color: black;
+}
+
+.tab {
     -fx-background-color: #212121;
+    -fx-text-base-color: white;
 }
 
 .text-area {
@@ -25,4 +31,8 @@
 
 #download_button {
     -fx-background-color: #ff2727;
+}
+
+#msg_label {
+    -fx-text-fill: white;
 }

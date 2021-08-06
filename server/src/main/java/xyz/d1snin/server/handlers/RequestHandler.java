@@ -20,7 +20,7 @@ public class RequestHandler extends SimpleChannelInboundHandler<ServerRequest> {
 
   @Override
   protected void channelRead0(ChannelHandlerContext ctx, ServerRequest msg) {
-    log.info("handled: {}", msg);
+    log.info("handled: {} {}", msg, msg.getClass());
     msg.setCtx(ctx);
 
     if (!(msg instanceof Unauthorized)

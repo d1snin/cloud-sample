@@ -6,6 +6,8 @@ import javafx.stage.Stage;
 import xyz.d1snin.client.api.managers.RequestManager;
 import xyz.d1snin.client.api.managers.SessionManager;
 
+import java.util.List;
+
 public interface CloudClient {
 
   Stage getStage();
@@ -21,6 +23,12 @@ public interface CloudClient {
   void setAuthenticationToken(String authenticationToken);
 
   Gson getGson();
+
+  void uploadFile(byte[] data, String fileName) throws RuntimeException;
+
+  void downloadFile(String fileName);
+
+  List<String> getFilesList();
 
   void launch();
 }

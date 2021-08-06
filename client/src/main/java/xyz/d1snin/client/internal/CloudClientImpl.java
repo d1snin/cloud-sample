@@ -24,9 +24,20 @@ import xyz.d1snin.client.controllers.MainSceneController;
 import xyz.d1snin.client.handlers.ResponseHandler;
 import xyz.d1snin.client.internal.managers.RequestManagerImpl;
 import xyz.d1snin.client.internal.managers.SessionManagerImpl;
+import xyz.d1snin.commons.server_requests.files.DownloadFileRequest;
+import xyz.d1snin.commons.server_requests.files.FileUploadRequest;
+import xyz.d1snin.commons.server_requests.files.UserFilesListRequest;
+import xyz.d1snin.commons.server_responses.Response;
+import xyz.d1snin.commons.server_responses.ResponseCodes;
+import xyz.d1snin.commons.server_responses.model.files.FileData;
+import xyz.d1snin.commons.server_responses.model.files.UserFilesData;
 
 import java.io.IOException;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.Executors;
 
@@ -92,6 +103,46 @@ public class CloudClientImpl implements CloudClient {
   @Override
   public Gson getGson() {
     return gson;
+  }
+
+  @Override
+  @SneakyThrows
+  public void uploadFile(byte[] data, String fileName) {
+    Response response = requestManager.submitRequest(new FileUploadRequest(data, fileName)).get();
+
+    if (response.getResponseCode() == ResponseCodes.FILE_ALREADY_EXISTS) {
+      throw new IllegalArgumentException("File already exists on the cloud.");
+    }
+
+    if (response.getResponseCode() == ResponseCodes.UPLOADING_FAILED) {
+      throw new RuntimeException("Uploading failed.");
+    }
+  }
+
+  @Override
+  @SneakyThrows
+  public void downloadFile(String fileName) {
+    Path downloads = Paths.get(System.getProperty("user.home"), "cloud");
+
+    if (!Files.exists(downloads)) {
+      Files.createDirectories(downloads);
+    }
+
+    Files.write(
+        downloads.resolve(fileName),
+        ((FileData)
+                requestManager.submitRequest(new DownloadFileRequest(fileName)).get().getContent())
+            .getBytes());
+    ;
+  }
+
+  @Override
+  @SneakyThrows
+  public List<String> getFilesList() {
+
+    return ((UserFilesData)
+            requestManager.submitRequest(new UserFilesListRequest()).get().getContent())
+        .getFiles();
   }
 
   @SneakyThrows

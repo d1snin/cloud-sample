@@ -49,6 +49,12 @@ public class StorageImpl implements Storage {
   public Path createFile(Path path) throws IllegalArgumentException {
     Checks.checkNotNull(path, "File path");
 
+    Path resolvedPath = this.path.resolve(path);
+
+    if (Files.exists(resolvedPath)) {
+      throw new IllegalArgumentException("File already exists");
+    }
+
     Path res = null;
 
     try {

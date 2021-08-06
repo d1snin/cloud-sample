@@ -9,6 +9,7 @@
 
 .tab {
     -fx-background-color: #212121;
+    -fx-text-base-color: white;
 }
 
 .text-field {
